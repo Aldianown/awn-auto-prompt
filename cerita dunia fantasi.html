@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kronik Pemburu Monster: 30 Episode Prompt</title>
+<style>
+:root{--bg:#f1eef7;--card:#fff;--ink:#241b3a;--mute:#6a6082;--line:#d8d0e8;--acc:#5a3fd0;--acc-ink:#fff;--ember:#b4491f;--done:#e3dcf6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#110d1f;--card:#1a1430;--ink:#ece6fb;--mute:#a79cc4;--line:#322a52;--acc:#8d77f5;--acc-ink:#0f0a1d;--ember:#f08a54;--done:#2b2150}}
+:root[data-theme="dark"]{--bg:#110d1f;--card:#1a1430;--ink:#ece6fb;--mute:#a79cc4;--line:#322a52;--acc:#8d77f5;--acc-ink:#0f0a1d;--ember:#f08a54;--done:#2b2150}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Cinzel","Georgia","Times New Roman",serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 56px}
+h1{font-size:clamp(26px,6vw,40px);line-height:1.1;margin:8px 0 6px}
+.sub{color:var(--mute);margin:0 0 18px;max-width:60ch;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+.sans{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.box{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin-bottom:16px}
+.box label{display:block;font-weight:700;margin-bottom:6px}
+.box input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:180px;max-width:100%}
+.box p{margin:8px 0;font-size:13px;color:var(--mute);word-break:break-word}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;margin-bottom:22px}
+.days button{padding:10px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;font:inherit;font-weight:700;cursor:pointer}
+.days button.done{background:var(--done)}
+.days button.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ember);outline-offset:2px}
+.head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.head h2{margin:0;font-size:22px}
+.head h2 small{display:block;color:var(--mute);font-weight:400;font-size:14px;font-family:system-ui,sans-serif}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--acc);background:var(--acc);color:var(--acc-ink);padding:9px 14px;border-radius:6px;font:600 15px system-ui,sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--acc)}
+.clip{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--ember);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.clip h3{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.clip h3 span{color:var(--mute);font-weight:400;font-size:13px;font-family:system-ui,sans-serif}
+.clip p{margin:0 0 10px;font:14px/1.5 system-ui,sans-serif;color:var(--mute);word-break:break-word}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:20px;font:14px system-ui,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<main>
+<h1>Kronik Pemburu Monster</h1>
+<p class="sub">30 episode, tiap episode satu monster dan satu video 60 detik (6 klip × 10 detik). Salin prompt dunia di bawah ke setiap klip, atau pakai tombol salin yang sudah menyertakannya.</p>
+<div class="box sans">
+<label for="hero">Nama tokoh utama</label>
+<input id="hero" value="Kael" maxlength="20">
+<p id="world"></p>
+<button class="btn alt" id="cw">Salin prompt dunia</button>
+</div>
+<div class="days" id="days"></div>
+<div class="head">
+<h2 id="title"></h2>
+<div class="row"><button class="btn" id="all">Salin semua klip</button><button class="btn alt" id="mark">Tandai selesai</button></div>
+</div>
+<div id="clips"></div>
+</main>
+<div class="toast" id="toast">Tersalin</div>
+<script>
+var M=[
+["Penjaga Lembah","three-eyed stone golem","a vast magical valley with glowing mana rivers"],
+["Rawa Berkabut","giant swamp serpent with glowing green scales","a foggy swamp with floating lanterns"],
+["Bulan Merah","shadow wolf with burning red eyes","a moonlit forest under a huge red moon"],
+["Gunung Api","sleeping fire dragon with molten cracks in its skin","a volcano filled with lava rivers"],
+["Hutan Berbisik","giant tree spirit with antler branches","an ancient forest of glowing giant trees"],
+["Reruntuhan Kristal","crystal guardian made of sharp blue shards","floating ruins with crystal pillars"],
+["Pantai Tulang","skeleton leviathan rising from the sea","a beach of white bones and black waves"],
+["Gua Kelelawar","swarm of giant glowing bats forming one huge shape","a cavern of glowing mushrooms"],
+["Padang Badai","thunder bird with lightning feathers","a stormy plain with floating rocks"],
+["Menara Terlupa","armored ghost knight with a broken crown","a crumbling tower above clouds"],
+["Danau Cermin","water witch beast made of living water","a mirror-like lake reflecting two moons"],
+["Pasar Sihir","mimic chest monster with tentacles and teeth","a bustling magical market at night"],
+["Hutan Es","frost troll with icicle armor","a snowy forest with aurora skies"],
+["Gurun Pasir","giant sand scorpion with golden shell","a desert with half-buried ancient statues"],
+["Jembatan Langit","gargoyle swarm with glowing eyes","a stone bridge between floating islands"],
+["Desa Terbakar","ember imp pack surrounding a huge fire ogre","a burning village at dusk"],
+["Perpustakaan Kuno","book-eating shadow beast with paper wings","a giant ancient library with floating books"],
+["Tambang Rune","iron-armored mole titan","an underground mine with glowing rune veins"],
+["Kebun Racun","carnivorous flower queen with vine arms","a poison garden of purple glowing flowers"],
+["Kapal Hantu","ghost kraken wrapped around a ruined ship","a dark ocean with a ghost ship"],
+["Gerbang Bayangan","twin shadow demons made of smoke","a giant dark gate on a black cliff"],
+["Lembah Naga Tua","ancient bone dragon with blue flame in its ribs","a valley full of giant dragon skeletons"],
+["Kota Terapung","mechanical magic golem gone berserk","a floating city of towers and bridges"],
+["Hutan Jamur","giant fungus beast releasing glowing spores","a forest of enormous glowing mushrooms"],
+["Sarang Laba-laba","crystal spider queen with mirror-like legs","a cave covered in glowing webs"],
+["Bukit Angin","wind wyvern with transparent wings","green hills with huge spinning wind spirals"],
+["Kuil Matahari","golden lion statue beast awakened by dark magic","a temple of sun with golden light"],
+["Sungai Darah","blood hound pack led by a horned alpha","a river glowing red under dark clouds"],
+["Puncak Takdir","shadow dragon with a thousand eyes","a mountain peak above the clouds at twilight"],
+["Takhta Raja Monster","the Monster King, a colossal horned demon in black crystal armor","a dark castle on a cracked sky-high throne of rock"]];
+var B=", dark fantasy anime style, a world where magic flows through the land and monsters roam freely, glowing blue mana, young monster hunter HERO, short black hair, red scarf, scarred cheek, glowing rune sword, worn leather armor, same character design, consistent outfit, cel-shaded, rich colors, cinematic lighting, detailed background art, no text, no watermark";
+var T=[["Pengenalan dunia","HERO walking through LOC, sweeping wide shot, flying creatures in the sky, golden hour"],
+["Tanda bahaya","LOC, the ground trembles, birds flee, a huge shadow of MON moves in the distance, HERO draws his rune sword, tense close-up on his eyes"],
+["Monster muncul","MON bursts into view in LOC, dust and debris flying, HERO looks up, dramatic low-angle shot"],
+["Pertarungan","HERO dodging the attack of MON in LOC, rune sword glowing blue, sparks flying, fast camera movement, speed lines, epic action"],
+["Klimaks","HERO leaps and drives his rune sword into the glowing core of MON, blinding white-blue explosion, slow motion, shockwave, particles floating"],
+["Penutup + kejutan","MON dissolves into glowing mana light flowing into the sword, HERO breathes heavily, then a much bigger shadow rises in the far distance, slow pull-back, ominous mood"]];
+var cur=0,done={};
+try{done=JSON.parse(localStorage.getItem("kael30")||"{}")}catch(e){}
+function hero(){return document.getElementById("hero").value.trim()||"Kael"}
+function W(){return "Dark fantasy anime"+B.slice(B.indexOf(",",1)).replace(/HERO/g,hero()).replace(", dark fantasy anime style","").replace(/^, /,", ")}
+function P(d,i){var m=M[d];return T[i][1].replace(/HERO/g,hero()).replace(/LOC/g,m[2]).replace(/MON/g,"a "+m[1])+B.replace(/HERO/g,hero())}
+function toast(s){var t=document.getElementById("toast");t.textContent=s;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)}
+function copy(txt){
+ function fb(){var a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand("copy");toast("Tersalin")}catch(e){toast("Gagal menyalin")}document.body.removeChild(a)}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("Tersalin")},fb)}else fb()}
+function save(){try{localStorage.setItem("kael30",JSON.stringify(done))}catch(e){}}
+function render(){
+ var dv=document.getElementById("days");dv.innerHTML="";
+ M.forEach(function(_,i){var b=document.createElement("button");b.textContent=i+1;b.className=(i===cur?"on ":"")+(done[i]?"done":"");b.setAttribute("aria-label","Episode "+(i+1));b.onclick=function(){cur=i;render();window.scrollTo(0,0)};dv.appendChild(b)});
+ document.getElementById("title").innerHTML="Episode "+(cur+1)+": "+M[cur][0]+"<small>Monster: "+M[cur][1]+"</small>";
+ document.getElementById("mark").textContent=done[cur]?"Batalkan tanda selesai":"Tandai selesai";
+ document.getElementById("world").textContent="Dunia dan tokoh: "+B.slice(2).replace(/HERO/g,hero());
+ var c=document.getElementById("clips");c.innerHTML="";
+ T.forEach(function(t,i){
+  var d=document.createElement("div");d.className="clip";
+  var h=document.createElement("h3");h.innerHTML="Klip "+(i+1)+": "+t[0]+"<span>10 detik</span>";
+  var p=document.createElement("p");p.textContent=P(cur,i);
+  var b=document.createElement("button");b.className="btn alt";b.textContent="Salin prompt";b.onclick=function(){copy(P(cur,i))};
+  d.appendChild(h);d.appendChild(p);d.appendChild(b);c.appendChild(d)})}
+document.getElementById("all").onclick=function(){copy(T.map(function(t,i){return "Klip "+(i+1)+" ("+t[0]+", 10 detik):\n"+P(cur,i)}).join("\n\n"))};
+document.getElementById("mark").onclick=function(){done[cur]=!done[cur];save();render()};
+document.getElementById("cw").onclick=function(){copy(B.slice(2).replace(/HERO/g,hero()))};
+document.getElementById("hero").oninput=render;
+render();
+</script>
+</body>
+</html>
