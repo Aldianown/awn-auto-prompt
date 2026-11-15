@@ -8,11 +8,14 @@
 :root{--bg:#f1f0f4;--card:#fff;--ink:#231f2e;--mute:#666072;--line:#d9d5e2;--acc:#0f6b66;--ai:#fff;--sec:#9a6b12;--done:#dcebe7;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 :root[data-mode="2"]{--acc:#5a3fd0;--sec:#b4491f;--done:#e3dcf6}
+:root[data-mode="3"]{--acc:#a8420f;--sec:#2f5d8a;--done:#f3e2d6}
 @media (prefers-color-scheme:dark){
 :root:not([data-theme="light"]){--bg:#14121b;--card:#1d1a27;--ink:#ece9f4;--mute:#a39dbb;--line:#332f45;--acc:#4fc4bb;--ai:#0b1514;--sec:#e0b04f;--done:#20403c}
-:root[data-mode="2"]:not([data-theme="light"]){--acc:#8d77f5;--ai:#0f0a1d;--sec:#f08a54;--done:#2b2150}}
+:root[data-mode="2"]:not([data-theme="light"]){--acc:#8d77f5;--ai:#0f0a1d;--sec:#f08a54;--done:#2b2150}
+:root[data-mode="3"]:not([data-theme="light"]){--acc:#f08a54;--ai:#1a0d05;--sec:#6fa8dc;--done:#3d2415}}
 :root[data-theme="dark"]{--bg:#14121b;--card:#1d1a27;--ink:#ece9f4;--mute:#a39dbb;--line:#332f45;--acc:#4fc4bb;--ai:#0b1514;--sec:#e0b04f;--done:#20403c}
 :root[data-theme="dark"][data-mode="2"]{--acc:#8d77f5;--ai:#0f0a1d;--sec:#f08a54;--done:#2b2150}
+:root[data-theme="dark"][data-mode="3"]{--acc:#f08a54;--ai:#1a0d05;--sec:#6fa8dc;--done:#3d2415}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -58,6 +61,7 @@ pre{overflow-x:auto;background:var(--bg);border:1px solid var(--line);padding:10
 <nav class="modes" aria-label="Pilih mode">
 <button data-m="1" aria-pressed="true">Mode 1<small>Restorasi</small></button>
 <button data-m="2" aria-pressed="false">Mode 2<small>Fantasi</small></button>
+<button data-m="3" aria-pressed="false">Mode 3<small>Kendaraan</small></button>
 </nav>
 <h1 id="h1"></h1>
 <p class="sub" id="sub"></p>
@@ -129,14 +133,23 @@ var T2=[["Pengenalan dunia","HERO walking through LOC, sweeping wide shot, flyin
 ["Pertarungan","HERO dodging the attack of MON in LOC, rune sword glowing blue, sparks flying, fast camera movement, speed lines, epic action"],
 ["Klimaks","HERO leaps and drives his rune sword into the glowing core of MON, blinding white-blue explosion, slow motion, shockwave, particles floating"],
 ["Penutup + kejutan","MON dissolves into glowing mana light flowing into the sword, HERO breathes heavily, then a much bigger shadow rises in the far distance, slow pull-back, ominous mood"]];
-var K={1:"asmr30",2:"kael30"},mode=1,cur={1:0,2:0},done={1:{},2:{}};
-try{done[1]=JSON.parse(localStorage.getItem(K[1])||"{}");done[2]=JSON.parse(localStorage.getItem(K[2])||"{}");var sm=localStorage.getItem("modeweb");if(sm==="2")mode=2}catch(e){}
+var V=[["Sedan klasik 1950-an","1950s vintage sedan car","in an old garage"],["Vespa tua","old Vespa scooter","in a dusty shed"],["VW Kodok","old VW Beetle","in a backyard under a tree"],["Jeep militer","old army Jeep","in a field of tall grass"],["Pickup tua","old pickup truck","on a farm"],["Bus kota tua","old city bus","in an abandoned depot"],["Motor chopper","rusty chopper motorcycle","in a garage"],["Motor bebek lawas","old small underbone motorcycle","in a village yard"],["Mobil balap lawas","vintage race car","in a warehouse"],["Traktor tua","old farm tractor","in a barn"],["Lokomotif uap","old steam locomotive","at an abandoned railway station"],["Perahu kayu nelayan","old wooden fishing boat","on a muddy riverbank"],["Kapal motor tua","abandoned old motor boat","in a dry dock"],["Pesawat baling-baling","old small propeller airplane","in an abandoned hangar"],["Van camper","old camper van","in a forest clearing"],["Ambulans tua","old vintage ambulance","in a junkyard"],["Mobil pemadam kebakaran","old fire truck","in a fire station garage"],["Mobil sport 1970-an","1970s sports car under a dusty tarp","in a garage"],["Sepeda onthel","old vintage bicycle","leaning against a barn wall"],["Limusin tua","old stretch limousine","in a junkyard"],["Becak","old cycle rickshaw","on a village street"],["Truk dump","old dump truck","at a quarry"],["Taksi kuning tua","old yellow taxi","in a backyard"],["Motor sespan","old sidecar motorcycle","in a garage"],["Bajaj","old three-wheeled auto rickshaw","in a street workshop"],["Convertible klasik","classic convertible car","in a barn"],["Ekskavator tua","old excavator","at a construction site"],["Kapal layar kayu","old wooden sailing boat","in a boatyard"],["Helikopter tua","old helicopter","in an overgrown field"],["Mobil legendaris terkubur debu","legendary vintage car buried under dust","in a forgotten barn"]];
+var S3=", life-size, real scale, not a toy, not a miniature, not a model, ultra-realistic, 4K, no text, no watermark";
+var T3=[["Hook","Wide shot of {o} {p}, abandoned for decades, covered in dust, rust and peeling paint, a person standing nearby for scale, moody natural light, slow camera push-in"],
+["Kondisi awal","Slow walk-around of {o} {p}, rust holes, flat tires, cracked glass, a worker hand wiping the dusty windshield, wide and medium shots, natural light"],
+["Pembersihan","A worker washing {o} with a pressure washer and sponge, mud, rust and grime washing off the body, foam and water spray, wide and medium shots, satisfying, slow motion"],
+["Perbaikan","A mechanic repairing {o}, sanding rust, welding sparks, replacing parts, fitting new tires, hood open, medium shots, workshop lighting"],
+["Pengecatan","A worker spray-painting and polishing {o}, glossy new paint, chrome shining, hand buffing the body, wide and medium shots, warm light"],
+["Hasil akhir","Fully restored {o} gleaming like new, parked outdoors in golden light, owner standing proudly beside it, slow orbit around the vehicle, engine starting"]];
+var K={1:"asmr30",2:"kael30",3:"kend30"},mode=1,cur={1:0,2:0,3:0},done={1:{},2:{},3:{}};
+try{done[1]=JSON.parse(localStorage.getItem(K[1])||"{}");done[2]=JSON.parse(localStorage.getItem(K[2])||"{}");done[3]=JSON.parse(localStorage.getItem(K[3])||"{}");var sm=localStorage.getItem("modeweb");if(sm==="2"||sm==="3")mode=+sm}catch(e){}
 function $(i){return document.getElementById(i)}
 function hero(){return $("hero").value.trim()||"Kael"}
-function T(){return mode===1?T1:T2}
-function N(){return mode===1?O.length:M.length}
+function T(){return mode===1?T1:mode===2?T2:T3}
+function N(){return mode===1?O.length:mode===2?M.length:V.length}
 function P(d,i){
  if(mode===1)return T1[i][1].replace("{o}",O[d][1])+S;
+ if(mode===3)return T3[i][1].replace(/\{o\}/g,V[d][1]).replace(/\{p\}/g,V[d][2])+S3;
  var m=M[d];return T2[i][1].replace(/HERO/g,hero()).replace(/LOC/g,m[2]).replace(/MON/g,"a "+m[1])+B.replace(/HERO/g,hero())}
 function toast(s){var t=$("toast");t.textContent=s;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)}
 function copy(txt){
@@ -147,12 +160,12 @@ function render(){
  document.documentElement.setAttribute("data-mode",mode);
  var bs=document.querySelectorAll(".modes button");
  for(var q=0;q<bs.length;q++)bs[q].setAttribute("aria-pressed",String(bs[q].getAttribute("data-m")==mode));
- $("h1").textContent=mode===1?"AWN-Studio:Paket prompt ASMR restorasi, 30 hari":"Cerita Pemburu Monster";
- $("sub").textContent=mode===1?"Satu hari, satu video 60 detik: 6 klip × 10 detik. Pilih hari, salin prompt tiap klip, tempel ke Kling, Runway, Hailuo, atau Veo, lalu gabungkan.":"30 episode, tiap episode satu monster dan satu video 60 detik (6 klip × 10 detik). Prompt dunia dan tokoh sudah otomatis menempel di setiap klip.";
+ $("h1").textContent=mode===1?"Paket prompt ASMR restorasi, 30 hari":mode===2?"Kronik Pemburu Monster":"Restorasi kendaraan skala asli, 30 hari";
+ $("sub").textContent=mode===1?"Satu hari, satu video 60 detik: 6 klip × 10 detik. Pilih hari, salin prompt tiap klip, tempel ke Kling, Runway, Hailuo, atau Veo, lalu gabungkan.":mode===2?"30 episode, tiap episode satu monster dan satu video 60 detik (6 klip × 10 detik). Prompt dunia dan tokoh sudah otomatis menempel di setiap klip.":"30 kendaraan besar (mobil, motor, truk, kapal, pesawat). Prompt memakai skala asli dan pembanding ukuran, supaya hasilnya tidak berubah jadi mainan atau miniatur.";
  $("hbox").className=mode===2?"box":"box hide";
  var c0=cur[mode],dn=done[mode],dv=$("days");dv.innerHTML="";
- for(var i=0;i<N();i++)(function(i){var b=document.createElement("button");b.textContent=i+1;b.className=(i===c0?"on ":"")+(dn[i]?"done":"");b.setAttribute("aria-label",(mode===1?"Hari ":"Episode ")+(i+1));b.onclick=function(){cur[mode]=i;render();window.scrollTo(0,0)};dv.appendChild(b)})(i);
- $("title").innerHTML=mode===1?"Hari "+(c0+1)+": "+O[c0][0]+"<small>"+O[c0][1]+"</small>":"Episode "+(c0+1)+": "+M[c0][0]+"<small>Monster: "+M[c0][1]+"</small>";
+ for(var i=0;i<N();i++)(function(i){var b=document.createElement("button");b.textContent=i+1;b.className=(i===c0?"on ":"")+(dn[i]?"done":"");b.setAttribute("aria-label",(mode===2?"Episode ":"Hari ")+(i+1));b.onclick=function(){cur[mode]=i;render();window.scrollTo(0,0)};dv.appendChild(b)})(i);
+ $("title").innerHTML=mode===1?"Hari "+(c0+1)+": "+O[c0][0]+"<small>"+O[c0][1]+"</small>":mode===2?"Episode "+(c0+1)+": "+M[c0][0]+"<small>Monster: "+M[c0][1]+"</small>":"Hari "+(c0+1)+": "+V[c0][0]+"<small>"+V[c0][1]+"</small>";
  $("mark").textContent=dn[c0]?"Batalkan tanda selesai":"Tandai selesai";
  if(mode===2)$("world").textContent="Dunia dan tokoh: "+B.slice(2).replace(/HERO/g,hero());
  var c=$("clips");c.innerHTML="";
