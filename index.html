@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id" data-mode="1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paket Prompt Video AI: Restorasi dan Fantasi</title>
+<style>
+:root{--bg:#f1f0f4;--card:#fff;--ink:#231f2e;--mute:#666072;--line:#d9d5e2;--acc:#0f6b66;--ai:#fff;--sec:#9a6b12;--done:#dcebe7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-mode="2"]{--acc:#5a3fd0;--sec:#b4491f;--done:#e3dcf6}
+@media (prefers-color-scheme:dark){
+:root:not([data-theme="light"]){--bg:#14121b;--card:#1d1a27;--ink:#ece9f4;--mute:#a39dbb;--line:#332f45;--acc:#4fc4bb;--ai:#0b1514;--sec:#e0b04f;--done:#20403c}
+:root[data-mode="2"]:not([data-theme="light"]){--acc:#8d77f5;--ai:#0f0a1d;--sec:#f08a54;--done:#2b2150}}
+:root[data-theme="dark"]{--bg:#14121b;--card:#1d1a27;--ink:#ece9f4;--mute:#a39dbb;--line:#332f45;--acc:#4fc4bb;--ai:#0b1514;--sec:#e0b04f;--done:#20403c}
+:root[data-theme="dark"][data-mode="2"]{--acc:#8d77f5;--ai:#0f0a1d;--sec:#f08a54;--done:#2b2150}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:14px 16px 56px}
+.modes{display:flex;gap:6px;justify-content:flex-start;margin-bottom:14px}
+.modes button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 14px;font:700 15px system-ui,sans-serif;cursor:pointer;text-align:left;line-height:1.2}
+.modes button small{display:block;font-weight:400;font-size:12px;color:var(--mute)}
+.modes button[aria-pressed="true"]{background:var(--acc);color:var(--ai);border-color:var(--acc)}
+.modes button[aria-pressed="true"] small{color:var(--ai);opacity:.85}
+h1{font-size:clamp(26px,6vw,40px);line-height:1.1;margin:8px 0 6px;letter-spacing:-.02em}
+:root[data-mode="2"] h1{font-family:Georgia,"Times New Roman",serif;letter-spacing:0}
+.sub{color:var(--mute);margin:0 0 18px;max-width:60ch}
+.box{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin-bottom:16px}
+.box label{display:block;font-weight:700;margin-bottom:6px}
+.box input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:180px;max-width:100%}
+.box p{margin:8px 0;font-size:13px;color:var(--mute);word-break:break-word}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;margin-bottom:22px}
+.days button{padding:10px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.days button.done{background:var(--done)}
+.days button.on{background:var(--acc);color:var(--ai);border-color:var(--acc)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sec);outline-offset:2px}
+.head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.head h2{margin:0;font-size:22px}
+.head h2 small{display:block;color:var(--mute);font-weight:400;font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--acc);background:var(--acc);color:var(--ai);padding:9px 14px;border-radius:8px;font:600 15px system-ui,sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--acc)}
+.clip{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--sec);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.clip h3{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.clip h3 span{color:var(--mute);font-weight:400;font-size:13px}
+.clip p{margin:0 0 10px;font-size:14px;color:var(--mute);word-break:break-word}
+.tools{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:22px}
+.tools h3{margin:0 0 6px}
+.tools p{margin:0 0 8px;color:var(--mute);font-size:14px}
+pre{overflow-x:auto;background:var(--bg);border:1px solid var(--line);padding:10px;border-radius:6px;font-size:12.5px;margin:0 0 10px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<nav class="modes" aria-label="Pilih mode">
+<button data-m="1" aria-pressed="true">Mode 1<small>Restorasi</small></button>
+<button data-m="2" aria-pressed="false">Mode 2<small>Fantasi</small></button>
+</nav>
+<h1 id="h1"></h1>
+<p class="sub" id="sub"></p>
+<div class="box hide" id="hbox">
+<label for="hero">Nama tokoh utama</label>
+<input id="hero" value="Kael" maxlength="20">
+<p id="world"></p>
+<button class="btn alt" id="cw">Salin prompt dunia</button>
+</div>
+<div class="days" id="days"></div>
+<div class="head">
+<h2 id="title"></h2>
+<div class="row"><button class="btn" id="all">Salin semua klip</button><button class="btn alt" id="mark">Tandai selesai</button></div>
+</div>
+<div id="clips"></div>
+<section class="tools">
+<h3>Gabungkan jadi 1 MP4</h3>
+<p>Taruh klip bernama 1.mp4 sampai 6.mp4 dalam satu folder, lalu jalankan (butuh ffmpeg). Hasilnya video 1 menit tanpa suara asli; tambahkan efek suara dan musik di CapCut.</p>
+<pre id="ff">printf "file '%s'\n" 1.mp4 2.mp4 3.mp4 4.mp4 5.mp4 6.mp4 > list.txt
+ffmpeg -f concat -safe 0 -i list.txt -c:v libx264 -pix_fmt yuv420p -r 30 hari.mp4</pre>
+<button class="btn alt" id="cff">Salin perintah</button>
+</section>
+</main>
+<div class="toast" id="toast">Tersalin</div>
+<script>
+var O=[["pisau dapur berkarat","rusty old kitchen knife"],["mesin jahit antik","rusty antique sewing machine"],["gembok tua","corroded antique padlock"],["kamera film jadul","dusty vintage film camera"],["jam saku kuno","tarnished antique pocket watch"],["radio tabung tua","dusty retro tube radio"],["kursi kayu lapuk","old wooden chair with peeling paint"],["sepeda tua berkarat","rusty vintage bicycle"],["kunci antik","corroded antique skeleton key"],["konsol game lama","dirty yellowed retro game console"],["boneka usang","worn and stained vintage teddy bear"],["koin kuno","dirty ancient coins covered in patina"],["kolam renang kotor","abandoned dirty swimming pool full of leaves and algae"],["cangkul dan sekop karatan","rusty old shovel and hoe"],["telepon putar","dusty rotary telephone"],["lampu minyak tua","tarnished old kerosene lamp"],["sepatu kulit lama","cracked and dirty old leather boots"],["gitar tua berdebu","dusty old acoustic guitar"],["setrika arang","rusty antique charcoal iron"],["meja kayu antik","scratched antique wooden table"],["mobil tua terbengkalai","abandoned dusty vintage car"],["teko kuningan","tarnished old brass kettle"],["mesin ketik","rusty antique typewriter"],["perhiasan kusam","tarnished old silver necklace"],["roda gigi mesin","greasy rusty machine gears"],["taman terbengkalai","overgrown abandoned garden with dirty fountain"],["kompas kuno","corroded antique brass compass"],["lemari kayu tua","old wooden cabinet with moldy surface"],["rumah kumuh","dirty neglected small room with grimy walls"],["jam dinding antik","dusty antique wall clock"]];
+var S=", ASMR restoration style, same camera angle, consistent soft lighting, ultra-realistic, 4K, no text, no watermark";
+var T1=[["Hook","Macro shot of {o}, extremely dirty and damaged, dust particles floating in light, dramatic moody lighting, slow camera push-in"],
+["Kondisi awal","Wide to close shot of {o} on a wooden workbench, rust, grime and cracks visible, a hand wiping away a patch of dust to reveal the surface underneath, slow motion"],
+["Pembersihan","Close-up of hands scrubbing {o} with a brush, grime and rust flakes falling, water spraying, foam bubbles, satisfying texture, slow motion"],
+["Perbaikan","Close-up of hands repairing {o}, sanding, tightening and replacing worn parts, small pieces clicking into place, clean details revealed, macro shot"],
+["Pemolesan","Close-up of hands polishing {o} with a cloth and applying fresh finish, surface gradually shining, smooth strokes, warm lighting, macro shot"],
+["Hasil akhir","Beautifully restored {o}, gleaming like new, on a clean wooden table, soft golden light, slow 360-degree rotation, sharp focus"]];
+var M=[
+["Penjaga Lembah","three-eyed stone golem","a vast magical valley with glowing mana rivers"],
+["Rawa Berkabut","giant swamp serpent with glowing green scales","a foggy swamp with floating lanterns"],
+["Bulan Merah","shadow wolf with burning red eyes","a moonlit forest under a huge red moon"],
+["Gunung Api","sleeping fire dragon with molten cracks in its skin","a volcano filled with lava rivers"],
+["Hutan Berbisik","giant tree spirit with antler branches","an ancient forest of glowing giant trees"],
+["Reruntuhan Kristal","crystal guardian made of sharp blue shards","floating ruins with crystal pillars"],
+["Pantai Tulang","skeleton leviathan rising from the sea","a beach of white bones and black waves"],
+["Gua Kelelawar","swarm of giant glowing bats forming one huge shape","a cavern of glowing mushrooms"],
+["Padang Badai","thunder bird with lightning feathers","a stormy plain with floating rocks"],
+["Menara Terlupa","armored ghost knight with a broken crown","a crumbling tower above clouds"],
+["Danau Cermin","water witch beast made of living water","a mirror-like lake reflecting two moons"],
+["Pasar Sihir","mimic chest monster with tentacles and teeth","a bustling magical market at night"],
+["Hutan Es","frost troll with icicle armor","a snowy forest with aurora skies"],
+["Gurun Pasir","giant sand scorpion with golden shell","a desert with half-buried ancient statues"],
+["Jembatan Langit","gargoyle swarm with glowing eyes","a stone bridge between floating islands"],
+["Desa Terbakar","ember imp pack surrounding a huge fire ogre","a burning village at dusk"],
+["Perpustakaan Kuno","book-eating shadow beast with paper wings","a giant ancient library with floating books"],
+["Tambang Rune","iron-armored mole titan","an underground mine with glowing rune veins"],
+["Kebun Racun","carnivorous flower queen with vine arms","a poison garden of purple glowing flowers"],
+["Kapal Hantu","ghost kraken wrapped around a ruined ship","a dark ocean with a ghost ship"],
+["Gerbang Bayangan","twin shadow demons made of smoke","a giant dark gate on a black cliff"],
+["Lembah Naga Tua","ancient bone dragon with blue flame in its ribs","a valley full of giant dragon skeletons"],
+["Kota Terapung","mechanical magic golem gone berserk","a floating city of towers and bridges"],
+["Hutan Jamur","giant fungus beast releasing glowing spores","a forest of enormous glowing mushrooms"],
+["Sarang Laba-laba","crystal spider queen with mirror-like legs","a cave covered in glowing webs"],
+["Bukit Angin","wind wyvern with transparent wings","green hills with huge spinning wind spirals"],
+["Kuil Matahari","golden lion statue beast awakened by dark magic","a temple of sun with golden light"],
+["Sungai Darah","blood hound pack led by a horned alpha","a river glowing red under dark clouds"],
+["Puncak Takdir","shadow dragon with a thousand eyes","a mountain peak above the clouds at twilight"],
+["Takhta Raja Monster","the Monster King, a colossal horned demon in black crystal armor","a dark castle on a cracked sky-high throne of rock"]];
+var B=", dark fantasy anime style, a world where magic flows through the land and monsters roam freely, glowing blue mana, young monster hunter HERO, short black hair, red scarf, scarred cheek, glowing rune sword, worn leather armor, same character design, consistent outfit, cel-shaded, rich colors, cinematic lighting, detailed background art, no text, no watermark";
+var T2=[["Pengenalan dunia","HERO walking through LOC, sweeping wide shot, flying creatures in the sky, golden hour"],
+["Tanda bahaya","LOC, the ground trembles, birds flee, a huge shadow of MON moves in the distance, HERO draws his rune sword, tense close-up on his eyes"],
+["Monster muncul","MON bursts into view in LOC, dust and debris flying, HERO looks up, dramatic low-angle shot"],
+["Pertarungan","HERO dodging the attack of MON in LOC, rune sword glowing blue, sparks flying, fast camera movement, speed lines, epic action"],
+["Klimaks","HERO leaps and drives his rune sword into the glowing core of MON, blinding white-blue explosion, slow motion, shockwave, particles floating"],
+["Penutup + kejutan","MON dissolves into glowing mana light flowing into the sword, HERO breathes heavily, then a much bigger shadow rises in the far distance, slow pull-back, ominous mood"]];
+var K={1:"asmr30",2:"kael30"},mode=1,cur={1:0,2:0},done={1:{},2:{}};
+try{done[1]=JSON.parse(localStorage.getItem(K[1])||"{}");done[2]=JSON.parse(localStorage.getItem(K[2])||"{}");var sm=localStorage.getItem("modeweb");if(sm==="2")mode=2}catch(e){}
+function $(i){return document.getElementById(i)}
+function hero(){return $("hero").value.trim()||"Kael"}
+function T(){return mode===1?T1:T2}
+function N(){return mode===1?O.length:M.length}
+function P(d,i){
+ if(mode===1)return T1[i][1].replace("{o}",O[d][1])+S;
+ var m=M[d];return T2[i][1].replace(/HERO/g,hero()).replace(/LOC/g,m[2]).replace(/MON/g,"a "+m[1])+B.replace(/HERO/g,hero())}
+function toast(s){var t=$("toast");t.textContent=s;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)}
+function copy(txt){
+ function fb(){var a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand("copy");toast("Tersalin")}catch(e){toast("Gagal menyalin")}document.body.removeChild(a)}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("Tersalin")},fb)}else fb()}
+function save(){try{localStorage.setItem(K[mode],JSON.stringify(done[mode]))}catch(e){}}
+function render(){
+ document.documentElement.setAttribute("data-mode",mode);
+ var bs=document.querySelectorAll(".modes button");
+ for(var q=0;q<bs.length;q++)bs[q].setAttribute("aria-pressed",String(bs[q].getAttribute("data-m")==mode));
+ $("h1").textContent=mode===1?"AWN-Studio:Paket prompt ASMR restorasi, 30 hari":"Cerita Pemburu Monster";
+ $("sub").textContent=mode===1?"Satu hari, satu video 60 detik: 6 klip × 10 detik. Pilih hari, salin prompt tiap klip, tempel ke Kling, Runway, Hailuo, atau Veo, lalu gabungkan.":"30 episode, tiap episode satu monster dan satu video 60 detik (6 klip × 10 detik). Prompt dunia dan tokoh sudah otomatis menempel di setiap klip.";
+ $("hbox").className=mode===2?"box":"box hide";
+ var c0=cur[mode],dn=done[mode],dv=$("days");dv.innerHTML="";
+ for(var i=0;i<N();i++)(function(i){var b=document.createElement("button");b.textContent=i+1;b.className=(i===c0?"on ":"")+(dn[i]?"done":"");b.setAttribute("aria-label",(mode===1?"Hari ":"Episode ")+(i+1));b.onclick=function(){cur[mode]=i;render();window.scrollTo(0,0)};dv.appendChild(b)})(i);
+ $("title").innerHTML=mode===1?"Hari "+(c0+1)+": "+O[c0][0]+"<small>"+O[c0][1]+"</small>":"Episode "+(c0+1)+": "+M[c0][0]+"<small>Monster: "+M[c0][1]+"</small>";
+ $("mark").textContent=dn[c0]?"Batalkan tanda selesai":"Tandai selesai";
+ if(mode===2)$("world").textContent="Dunia dan tokoh: "+B.slice(2).replace(/HERO/g,hero());
+ var c=$("clips");c.innerHTML="";
+ T().forEach(function(t,i){
+  var d=document.createElement("div");d.className="clip";
+  var h=document.createElement("h3");h.innerHTML="Klip "+(i+1)+": "+t[0]+"<span>10 detik</span>";
+  var p=document.createElement("p");p.textContent=P(c0,i);
+  var b=document.createElement("button");b.className="btn alt";b.textContent="Salin prompt";b.onclick=function(){copy(P(c0,i))};
+  d.appendChild(h);d.appendChild(p);d.appendChild(b);c.appendChild(d)})}
+var mb=document.querySelectorAll(".modes button");
+for(var z=0;z<mb.length;z++)mb[z].onclick=function(){mode=+this.getAttribute("data-m");try{localStorage.setItem("modeweb",String(mode))}catch(e){}render();window.scrollTo(0,0)};
+$("all").onclick=function(){copy(T().map(function(t,i){return "Klip "+(i+1)+" ("+t[0]+", 10 detik):\n"+P(cur[mode],i)}).join("\n\n"))};
+$("mark").onclick=function(){done[mode][cur[mode]]=!done[mode][cur[mode]];save();render()};
+$("cw").onclick=function(){copy(B.slice(2).replace(/HERO/g,hero()))};
+$("cff").onclick=function(){copy($("ff").textContent)};
+$("hero").oninput=render;
+render();
+</script>
+</body>
+</html>
